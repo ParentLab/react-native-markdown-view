@@ -50,7 +50,13 @@ const IMAGE_HREF_AND_TITLE = "\\s*<?((?:[^\\s\\\\]|\\\\.)*?)>?(?:\\s+['\"]([\\s\
 const IMAGE_SIZE = "(?:\\s+=([0-9]+)x([0-9]+))?\\)\\s*"
 
 const inlineRegex = (regex) => ((source, state) => state.inline ? regex.exec(source) : null)
-const unescapeUrl = (url) => url.replace(/\\([^0-9A-Za-z\s])/g, '$1')
+const unescapeUrl = (url) => {
+  url = url.replace(/\\([^0-9A-Za-z\s])/g, '$1');
+  if (url.startsWith('//')) {
+    url = 'https:' + url;
+  }
+  return url;
+}
 
 const DefaultRules : Rules = Object.freeze(mergeRules(
   Object.assign(
